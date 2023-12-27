@@ -1,6 +1,6 @@
 """
-NotePy
-======
+Note
+====
 
 Provides
   1. Name of note, characteristics, playback
@@ -9,9 +9,9 @@ Provides
 How to use the documentation
 ----------------------------
 Docstrings provided with the code
-  
+
   >>> import note
-  >>> help(note.Note) 
+  >>> help(note.Note)
 
 Available subpackages
 ---------------------
