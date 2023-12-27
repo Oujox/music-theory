@@ -1,5 +1,5 @@
 from __future__ import annotations
-from note import ALL_NOTENAME
+from ..note._const import ALL_NOTENAME
 
 NOTE2_QUALITIES = {
     "5":        (0, 7),

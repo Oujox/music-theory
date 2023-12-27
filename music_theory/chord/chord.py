@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 import typing as t
 
-from note import Note, NoteBase
+from ..note import NoteBase
 from .quality import Quality
 
 

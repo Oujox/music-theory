@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import typing as t
-from .mods.mod import NoteMod
+from .mod import NoteMod
 from ._const import NOTENAME_TO_PITCH, PITCH_TO_NOTENAME, ALL_NOTENAME
 
 

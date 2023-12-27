@@ -1,16 +1,6 @@
 from ._note import _Note
-from .handlers import SynthesiserHandler, TunerHandler
-
 
 class NoteSimple(_Note):
-    """
-    """
-
-    def __init__(self, note_number: int, **kwargs) -> None:
-        super().__init__(note_number, **kwargs)
-
-
-class Note(SynthesiserHandler, TunerHandler):
     """
     Data to provide many ways of expressing things about note
 
@@ -26,10 +16,6 @@ class Note(SynthesiserHandler, TunerHandler):
     See Also
     --------
     Note.from_notename : Constructor from notename and pitch.
-
-    Add functionality
-    -----------------
-    This data structure is created by a Handler class that inherits from NoteHandlerProxy.
 
     Examples
     --------
@@ -52,4 +38,3 @@ class Note(SynthesiserHandler, TunerHandler):
 
     def __init__(self, note_number: int, **kwargs) -> None:
         super().__init__(note_number, **kwargs)
-

@@ -1,32 +1,14 @@
 from numpy import ndarray
-from ._note import _Note
-
-class NoteHandlerProxy(_Note):
-    """
-    """
-
-
-class TunerHandler(NoteHandlerProxy):
-
-    def __init__(self, note_number: int, **kwargs) -> None:
-        # mods
-        from .mods.tuner import TunerObject
-        self.tuner: TunerObject = kwargs.pop("tuner", None)
-
-        super().__init__(note_number, **kwargs)
-    
-    @property
-    def hz(self) -> float:
-        return self.tuner.hz(self._number)
-
+from ..note import NoteHandlerProxy
 
 class SynthesiserHandler(NoteHandlerProxy):
 
     def __init__(self, note_number: int, **kwargs) -> None:
         # mods
-        from .mods.synthesiser import SynthesiserObject
+        from .synthesiser import SynthesiserObject
         self.synthe: SynthesiserObject = kwargs.pop("synthe", None)
         
+        from ..tuner import TunerHandler
         if not TunerHandler in self.__class__.mro():
             raise NotImplementedError("TunerHandler が継承されていない.")
         

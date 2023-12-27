@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 
-from . import NoteMod
+from ..note import NoteMod
 
 
 class TunerObject(NoteMod, metaclass=ABCMeta):

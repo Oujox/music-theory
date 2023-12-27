@@ -1,4 +1,4 @@
-from . import Scale
+from ..note.scale import Scale
 from .abc import TunerObject
 
 class JustIntonation(TunerObject):
