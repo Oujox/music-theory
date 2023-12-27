@@ -1,0 +1,5 @@
+# ignore __pycache__ in all dir
+**/__pycache__/**
+
+# ignore version control files by pyenv in all dir
+.python-version
