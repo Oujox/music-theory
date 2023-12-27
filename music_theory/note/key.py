@@ -13,7 +13,7 @@ class Key:
         self._pitchclass = NOTENAME_TO_PITCH[name]
 
         self._fifth = FIFTH_SEQUENCE.index(self._pitchclass)
-        self._fs_cnt: int = PITCH_TO_NOTENAME[self._pitchclass].index(self._name) - 2
+        self._accsidental: int = PITCH_TO_NOTENAME[self._pitchclass].index(self._name) - 2
 
     @property
     def name(self) -> str:
@@ -28,8 +28,8 @@ class Key:
         return self._fifth
     
     @property
-    def fs_count(self) -> int:
-        return self._fs_cnt
+    def accsidental(self) -> int:
+        return self._accsidental
     
     def __int__(self) -> int:
         return self._fifth

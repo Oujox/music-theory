@@ -5,7 +5,7 @@ from ._note import NoteBase
 
 def count_flat_sharp(key: Key) -> int:
     if key.fifth == 6:
-        fs_count = fs_count - 12 if key.fifth > int(key.fs_count == 1) + 5 else key.fifth
+        fs_count = fs_count - 12 if key.fifth > int(key.accsidental == 1) + 5 else key.fifth
     else:
         fs_count = fs_count - 12 if key.fifth > 5 else key.fifth
     return fs_count
