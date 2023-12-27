@@ -1,35 +1,45 @@
 import typing as t
-from ._note import NoteBase
+from ._statics import NOTENAME_TO_PITCH, PITCH_TO_NOTENAME, ALL_KEYNAME, FIFTH_SEQUENCE
 
 
 class Key:
     
     def __init__(self, name: str) -> None:
 
-        self._name = NoteBase.from_notename(name)
-        self._pos: int = self._name._dict_notenames.index(self.name)
+        if not self.is_keyname(name):
+            raise ValueError()
+
+        self._name  = name
+        self._pitchclass = NOTENAME_TO_PITCH[name]
+
+        self._fifth = FIFTH_SEQUENCE.index(self._pitchclass)
+        self._fs_cnt: int = PITCH_TO_NOTENAME[self._pitchclass].index(self._name) - 2
 
     @property
     def name(self) -> str:
-        return self._name.name
+        return self._name
     
     @property
-    def names(self):
-        return self._name.names
+    def pitchclass(self) -> int:
+        return self._pitchclass
     
     @property
-    def pitchclass(self):
-        return self._name.pitchclass
+    def fifth(self) -> int:
+        return self._fifth
     
-    def next(self, degree: int, mask: int) -> t.Self:
-        name = self._name + degree
-        return self.__class__(name._dict_notenames[mask+2])
+    @property
+    def fs_count(self) -> int:
+        return self._fs_cnt
     
     def __int__(self) -> int:
-        return self._name.pitchclass
+        return self._fifth
     
     def __str__(self) -> str:
-        return "<Key: {}>".format(self._name.name)
+        return "<Key: {}>".format(self._name)
     
     def __repr__(self) -> str:
-        return "<Key: {}>".format(self._name.name)
+        return "<Key: {}>".format(self._name)
+    
+    @classmethod
+    def is_keyname(cls, name: str) -> t.TypeGuard[str]:
+        return isinstance(name, str) and name in ALL_KEYNAME

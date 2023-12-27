@@ -22,8 +22,8 @@ synth
     Provides an array of waveforms for changing tones
 """
 
-from .note import NoteSimple
-from .key import Key, NoteBase
+from .note import NoteSimple, NoteBase
+from .key import Key
 from . import scale
 
 from .mod import NoteMod

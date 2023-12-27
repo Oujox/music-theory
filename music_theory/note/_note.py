@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import typing as t
 from .mod import NoteMod
-from ._const import NOTENAME_TO_PITCH, PITCH_TO_NOTENAME, ALL_NOTENAME
+from ._statics import NOTENAME_TO_PITCH, PITCH_TO_NOTENAME, ALL_NOTENAME
 
 
 class NoteBase:
@@ -49,8 +49,11 @@ class NoteBase:
         return self._pitchclass
     
     def __str__(self) -> str:
-        return "<NoteName: {}>".format(str(self._name))
+        return str(self._name)
     
+    def __repr__(self) -> str:
+        return str(self._name)
+        
     def __setattr__(self, __name: str, __value: t.Any) -> None:
         from .abc import Scale
         if __name == "scale" and isinstance(__value, Scale):

@@ -1,4 +1,4 @@
-from ._note import _Note
+from ._note import _Note, NoteBase
 
 class NoteSimple(_Note):
     """

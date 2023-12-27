@@ -1,15 +1,13 @@
-from .key import Key
 from .abc import Scale
-from ._const import FIFTH_SEQUENCE
+from .key import Key
+from ._note import NoteBase
 
 
 def count_flat_sharp(key: Key) -> int:
-    fs_count = FIFTH_SEQUENCE.index(key.pitchclass)
-    if key.pitchclass == 6:
-        # TODO: key._pos is eq to 2 or 3
-        fs_count = fs_count - 12 if fs_count > int(key._pos == 3) + 5 else fs_count
+    if key.fifth == 6:
+        fs_count = fs_count - 12 if key.fifth > int(key.fs_count == 1) + 5 else key.fifth
     else:
-        fs_count = fs_count - 12 if fs_count > 5 else fs_count
+        fs_count = fs_count - 12 if key.fifth > 5 else key.fifth
     return fs_count
 
 def generate_mask_by_key(fs_count: int) -> list[int]:
@@ -27,17 +25,19 @@ class CurchMode(Scale):
 
     degree: tuple[int]
     s_mask: tuple[int]
-    
 
     @property
-    def diatonic(self):
-        diatonic_ = [ self.key ]
+    def diatonic(self) -> list[NoteBase]:
+        diatonic_ = [ NoteBase.from_notename(self.key.name) ]
         
         fs_count = count_flat_sharp(self.key)
         k_mask = generate_mask_by_key(fs_count)
 
         for n in range(6):
-            diatonic_.append(diatonic_[n].next(self.degree[n], self.s_mask[n+1] + k_mask[n+1]))
+            note = diatonic_[n] + self.degree[n]
+            notename = note._dict_notenames[self.s_mask[n+1] + k_mask[n+1] + 2]
+            diatonic_.append(NoteBase.from_notename(notename))
+        
         return diatonic_
 
 

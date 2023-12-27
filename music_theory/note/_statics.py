@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 PITCH_TO_NOTENAME: dict[int, tuple[str|None]] = {
     9 : ( "Bbb" , None , "A"  , None , "G##" ),
     10: ( "Cbb" , "Bb" , None , "A#" , None  ),
@@ -26,5 +24,7 @@ NOTENAME_TO_PITCH: dict[str, int] = {
 }
 
 ALL_NOTENAME = tuple(NOTENAME_TO_PITCH.keys())
-ALL_PITCH = tuple(PITCH_TO_NOTENAME.keys())
+ALL_PITCH    = tuple(PITCH_TO_NOTENAME.keys())
+ALL_KEYNAME  = tuple([ n for n in ALL_NOTENAME if len(n) < 3])
+
 FIFTH_SEQUENCE = (0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5)
