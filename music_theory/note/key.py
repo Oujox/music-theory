@@ -3,7 +3,7 @@ from ._statics import NOTENAME_TO_PITCH, PITCH_TO_NOTENAME, ALL_KEYNAME, FIFTH_S
 
 
 class Key:
-    
+
     def __init__(self, name: str) -> None:
 
         if not self.is_keyname(name):
@@ -18,28 +18,28 @@ class Key:
     @property
     def name(self) -> str:
         return self._name
-    
+
     @property
     def pitchclass(self) -> int:
         return self._pitchclass
-    
+
     @property
     def fifth(self) -> int:
         return self._fifth
-    
+
     @property
     def accsidental(self) -> int:
         return self._accsidental
-    
+
     def __int__(self) -> int:
         return self._fifth
-    
+
     def __str__(self) -> str:
         return "<Key: {}>".format(self._name)
-    
+
     def __repr__(self) -> str:
         return "<Key: {}>".format(self._name)
-    
+
     @classmethod
     def is_keyname(cls, name: str) -> t.TypeGuard[str]:
         return isinstance(name, str) and name in ALL_KEYNAME

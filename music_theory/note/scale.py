@@ -29,15 +29,15 @@ class CurchMode(Scale):
     @property
     def diatonic(self) -> list[NoteBase]:
         diatonic_ = [ NoteBase.from_notename(self.key.name) ]
-        
+
         fs_count = count_flat_sharp(self.key)
         k_mask = generate_mask_by_key(fs_count)
 
         for n in range(6):
             note = diatonic_[n] + self.degree[n]
-            notename = note._dict_notenames[self.s_mask[n+1] + k_mask[n+1] + 2]
+            notename = note.names_sequence[self.s_mask[n+1] + k_mask[n+1] + 2]
             diatonic_.append(NoteBase.from_notename(notename))
-        
+
         return diatonic_
 
 

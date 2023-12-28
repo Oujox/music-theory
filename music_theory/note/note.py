@@ -1,4 +1,5 @@
-from ._note import _Note, NoteBase
+from ._note import _Note
+
 
 class NoteSimple(_Note):
     """
@@ -35,6 +36,3 @@ class NoteSimple(_Note):
       >>> <Note: C4; number: 60>
 
     """
-
-    def __init__(self, note_number: int, **kwargs) -> None:
-        super().__init__(note_number, **kwargs)
