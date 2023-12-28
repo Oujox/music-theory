@@ -2,7 +2,7 @@ from .tuner import TunerHandler
 from .synthesiser import SynthesiserHandler
 
 
-class Note(SynthesiserHandler, TunerHandler):
+class Note_(SynthesiserHandler, TunerHandler):
     """
     Data to provide many ways of expressing things about note
 

@@ -1,6 +1,6 @@
 from .abc import Scale
 from .key import Key
-from ._note import NoteBase
+from .note import NoteBase
 
 
 def count_flat_sharp(key: Key) -> int:

@@ -22,10 +22,9 @@ synth
     Provides an array of waveforms for changing tones
 """
 
-from .note import NoteSimple, NoteBase
+from .note import Note, NoteBase
 from .key import Key
 from . import scale
 
 from .mod import NoteMod
 from .handler import NoteHandlerProxy
-

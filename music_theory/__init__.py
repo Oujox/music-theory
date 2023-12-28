@@ -3,4 +3,4 @@ from .chord import *
 from . import tuner
 from . import synthesiser as synthe
 
-from .note_derived import Note
+from .note_derived import Note_

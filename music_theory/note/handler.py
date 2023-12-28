@@ -1,5 +1,5 @@
-from ._note import _Note
+from .note import Note
 
-class NoteHandlerProxy(_Note):
+class NoteHandlerProxy(Note):
     """
     """
