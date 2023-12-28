@@ -59,7 +59,7 @@ class NoteBase(MstObject):
         """Get the note names.
 
         Returns:
-            list[str]: The note names. If the note does not have a name, returns None.
+            list[str]: The note names.
         """
         return [ n for n in PITCH_TO_NOTENAME[self.pitchclass] if n is not None]
 
@@ -73,7 +73,7 @@ class NoteBase(MstObject):
         return self._pitchclass
 
     @property
-    def names_sequence(self):
+    def names_sequence(self) -> tuple[str | None]:
         """Returns the sequence of note names for the pitch class of the note.
 
         Returns:
@@ -83,8 +83,6 @@ class NoteBase(MstObject):
 
     @property
     def scale(self) -> Scale | None:
-        """Returns the scale of the note.
-        """
         return self._scale
 
     @scale.setter
@@ -149,7 +147,7 @@ class NoteBase(MstObject):
             If the note name is not valid.
         """
         if not cls.is_notename(name):
-            raise ValueError(f"<Note: {name}> は存在しません.")
+            raise ValueError(f"there is no notename called {name}.")
         return cls(NOTENAME_TO_PITCH[name], _name=name, **kwargs)
 
     @classmethod
@@ -255,8 +253,12 @@ class Note(NoteBase):
         """Get the note names.
 
         Returns:
-            list[str]: The note names. If the note does not have a name, returns None.
+            list[str]: The note names.
         """
+        if self.pitchclass == 0:
+            return [ n + str(self.pitch - int(i == 0)) for i, n in enumerate(super().names) ]
+        if self.pitchclass == 11:
+            return [ n + str(self.pitch + int(i == 2)) for i, n in enumerate(super().names) ]
         return [ n + str(self.pitch) for n in super().names ]
 
     @property

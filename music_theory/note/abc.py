@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractproperty
-from .key import Key
 
+from .key import Key
 from ..mst_object import MstObject
 
 
@@ -11,5 +11,5 @@ class Scale(MstObject, metaclass=ABCMeta):
 
     @property
     @abstractproperty
-    def diatonic(self) -> list[Key]:
+    def diatonic(self) -> list:
         pass
