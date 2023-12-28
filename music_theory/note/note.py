@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import typing as t
-from .mod import NoteMod
 from .abc import Scale
 from ._statics import NOTENAME_TO_PITCH, PITCH_TO_NOTENAME, ALL_NOTENAME
 
@@ -140,12 +139,6 @@ class Note(NoteBase):
     def pitch(self) -> int:
         return self._number//12 - 1
 
-    @property
-    def mods(self) -> dict[str, NoteMod]:
-        return dict(
-            [ [k, v] for k, v in self.__dict__.items() if isinstance(v, NoteMod)]
-        )
-
     def __eq__(self, other: int|Note) -> bool:
         return self._number == int(other)
 
@@ -158,14 +151,14 @@ class Note(NoteBase):
     def __gt__(self, other: int|Note) -> bool:
         return self._number > int(other)
 
-    def __add__(self, other: int) -> t.Self:
-        return self.__class__(self._number + other, **self.mods)
+    def __add__(self, other: int) -> Note:
+        return Note(self._number + other)
 
-    def __sub__(self, other: int) -> t.Self:
-        return self.__class__(self._number - other, **self.mods)
+    def __sub__(self, other: int) -> Note:
+        return Note(self._number - other)
 
-    def __matmul__(self, other: int) -> t.Self:
-        return self.__class__(self._number + other*12, **self.mods)
+    def __matmul__(self, other: int) -> Note:
+        return Note(self._number + other*12)
 
     def __int__(self) -> int:
         return self._number

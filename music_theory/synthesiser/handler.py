@@ -1,16 +1,12 @@
 from numpy import ndarray
-from ..note import NoteHandlerProxy
+from .synthesiser import SynthesiserObject
+from ..tuner import TunerHandler
 
-class SynthesiserHandler(NoteHandlerProxy):
+class SynthesiserHandler(TunerHandler):
 
     def __init__(self, note_number: int, **kwargs) -> None:
         # mods
-        from .synthesiser import SynthesiserObject
         self.synthe: SynthesiserObject = kwargs.pop("synthe", None)
-
-        from ..tuner import TunerHandler
-        if not TunerHandler in self.__class__.mro():
-            raise NotImplementedError("TunerHandler が継承されていない.")
 
         super().__init__(note_number, **kwargs)
 
