@@ -26,5 +26,4 @@ from .note import Note, NoteBase
 from .key import Key
 from . import scale
 
-from .mod import NoteMod
 from .handler import NoteHandlerProxy

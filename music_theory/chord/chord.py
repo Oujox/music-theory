@@ -3,8 +3,9 @@ from __future__ import annotations
 import re
 import typing as t
 
-from ..note import NoteBase
 from .quality import Quality
+from ..note import NoteBase
+from ..mst_object import MstObject
 
 
 notename_ptn = re.compile(r"[A-Z][#b]?")
@@ -13,7 +14,7 @@ tension_ptn = re.compile(r"([-+b#]?9|[+#]?11|[-b]?13)+")
 onchord_ptn = re.compile(r"\/[A-Z][#b]?")
 
 
-class Chord:
+class Chord(MstObject):
 
     def __init__(self, name: str):
         self._name = name

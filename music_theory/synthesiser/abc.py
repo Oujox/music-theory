@@ -1,8 +1,8 @@
-import os, datetime, wave, pyaudio
 from abc import ABCMeta, abstractmethod
+import os, datetime, wave, pyaudio
 import numpy as np
 
-from ..note import NoteMod
+from ..mst_object import MstModObject
 
 
 class Oscillator(metaclass=ABCMeta):
@@ -27,7 +27,7 @@ class Modulator(metaclass=ABCMeta):
     pass
 
 
-class SynthesiserObject(NoteMod, metaclass=ABCMeta):
+class SynthesiserObject(MstModObject, metaclass=ABCMeta):
 
     osi: Oscillator
     fil: Filter

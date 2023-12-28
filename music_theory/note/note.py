@@ -4,8 +4,10 @@ import typing as t
 from .abc import Scale
 from ._statics import NOTENAME_TO_PITCH, PITCH_TO_NOTENAME, ALL_NOTENAME
 
+from ..mst_object import MstObject
 
-class NoteBase:
+
+class NoteBase(MstObject):
 
     def __init__(self, pitchclass: int, **kwargs) -> None:
 
