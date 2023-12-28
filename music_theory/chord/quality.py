@@ -1,5 +1,5 @@
 from __future__ import annotations
-from ._const import NOTE2_QUALITIES, NOTE3_QUALITIES, NOTE4_QUALITIES
+from ._statics import NOTE2_QUALITIES, NOTE3_QUALITIES, NOTE4_QUALITIES
 
 
 class Quality:
