@@ -18,7 +18,7 @@ class SynthesiserHandler(TunerHandler):
             self.synthe.save(save, wave, self.hz, **kwargs)
         return wave
 
-    def _wave(self, **kwargs) -> ndarray:
+    def wave_forsound(self, **kwargs) -> ndarray:
         wave = self.synthe.wave(self.hz, 1/self.hz)
         if kwargs.pop("sound", False):
             self.synthe.sound(wave, **kwargs)

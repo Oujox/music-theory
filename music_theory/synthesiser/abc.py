@@ -29,21 +29,24 @@ class Modulator(metaclass=ABCMeta):
 
 class SynthesiserObject(MstModObject, metaclass=ABCMeta):
 
+    amp = pyaudio.PyAudio()
     osi: Oscillator
     fil: Filter
     env: Envelope
     mod: Modulator
+
+    def __del__(self) -> None:
+        self.amp.terminate()
 
     @abstractmethod
     def wave(self, sec: float) -> np.ndarray:
         pass
 
     def sound(self, wave_: np.ndarray) -> None:
-        p = pyaudio.PyAudio()
         wave_ = wave_ * ((2**15)-1 / np.max(wave_))
         bin_wave = wave_.astype(np.int16).tobytes()
 
-        stream_out = p.open(
+        stream_out = self.amp.open(
             format=pyaudio.paInt16,
             channels=1,
             rate=self.osi._sampling_hz,
@@ -51,12 +54,13 @@ class SynthesiserObject(MstModObject, metaclass=ABCMeta):
             input=False,
             output=True,
             )
-
-        while stream_out.is_active():
-            stream_out.write(bin_wave)
+        try:
+            while stream_out.is_active():
+                stream_out.write(bin_wave)
+        except KeyboardInterrupt:
+            pass
         stream_out.stop_stream()
         stream_out.close()
-        p.terminate()
 
     def save(self, path: str, wave_: np.ndarray, hz: float) -> str:
         now = datetime.datetime.now().strftime(f"%Y%m%d-%H%M%S")
