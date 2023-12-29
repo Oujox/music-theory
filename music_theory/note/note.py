@@ -7,6 +7,9 @@ import typing as t
 from .abc import ScaleBase, NoteBase
 from ._statics import NOTENAME_TO_PITCH, PITCH_TO_NOTENAME, ALL_NOTENAME
 
+OCTAVE_NUMBER = 12
+MIDI_NUMBER = 128
+
 notename_ptn = re.compile(r"[A-G][b#]{0,2}")
 
 def pitch_pitchclass_relation(pitch: int, pitchclass: int) -> bool:
@@ -59,7 +62,7 @@ class NoteOctave(NoteBase):
       >>> note_name = "C"
       >>> c = NoteOctave.from_notename(name=note_name)
       >>> c
-      'C4'
+      'C'
 
     """
     def __init__(
@@ -140,10 +143,10 @@ class NoteOctave(NoteBase):
         return self._pitchclass != int(other)
 
     def __add__(self, other: int) -> NoteOctave:
-        return NoteOctave((self._pitchclass + other)%12, scale=self._scale)
+        return NoteOctave((self._pitchclass + other)%OCTAVE_NUMBER, scale=self._scale)
 
     def __sub__(self, other: int) -> NoteOctave:
-        return NoteOctave((self._pitchclass - other)%12, scale=self._scale)
+        return NoteOctave((self._pitchclass - other)%OCTAVE_NUMBER, scale=self._scale)
 
     def __int__(self) -> int:
         return self._pitchclass
@@ -217,7 +220,7 @@ class NoteOctave(NoteBase):
         bool
             ``True`` if the input is a valid pitch class, ``False`` otherwise.
         """
-        return isinstance(pitchclass, int) and 0 <= pitchclass < 12
+        return isinstance(pitchclass, int) and 0 <= pitchclass < OCTAVE_NUMBER
 
 
 class NoteMidi(NoteOctave):
@@ -267,7 +270,7 @@ class NoteMidi(NoteOctave):
         self._number: int = note_number
 
         super().__init__(
-            note_number%12,
+            note_number%OCTAVE_NUMBER,
             scale=scale,
             **kwargs
             )
@@ -297,11 +300,15 @@ class NoteMidi(NoteOctave):
         Returns:
             list[str]: The note names.
         """
-        if self.pitchclass == 0:
-            return [ n + str(self.pitch - int(i == 2)) for i, n in enumerate(super().names) ]
-        if self.pitchclass == 11:
-            return [ n + str(self.pitch + int(i == 0)) for i, n in enumerate(super().names) ]
-        return [ n + str(self.pitch) for n in super().names ]
+        names = [ n + str(self.pitch) for n in super().names ]
+
+        if self.pitchclass == 0 and self.pitch == -1:
+            return names[:-1]
+
+        if self.pitchclass == 7 and self.pitch == 9:
+            return names[1:]
+
+        return names
 
     @property
     def pitch(self) -> int:
@@ -310,7 +317,7 @@ class NoteMidi(NoteOctave):
         Returns:
             int: The pitch of the note.
         """
-        return self._number//12 - 1
+        return self._number//OCTAVE_NUMBER - 1
 
     def __eq__(self, other: int | NoteMidi) -> bool:
         return self._number == int(other)
@@ -324,6 +331,12 @@ class NoteMidi(NoteOctave):
     def __gt__(self, other: int | NoteMidi) -> bool:
         return self._number > int(other)
 
+    def __le__(self, other: int | NoteMidi) -> bool:
+        return self._number <= int(other)
+
+    def __ge__(self, other: int | NoteMidi) -> bool:
+        return self._number >= int(other)
+
     def __add__(self, other: int) -> NoteMidi:
         return NoteMidi(self._number + other)
 
@@ -331,7 +344,7 @@ class NoteMidi(NoteOctave):
         return NoteMidi(self._number - other)
 
     def __matmul__(self, other: int) -> NoteMidi:
-        return NoteMidi(self._number + other*12)
+        return NoteMidi(self._number + other*OCTAVE_NUMBER)
 
     def __int__(self) -> int:
         return self._number
@@ -378,7 +391,7 @@ class NoteMidi(NoteOctave):
         if super().is_notename(notename):
             if not pitch_pitchclass_relation(int(pitch), pitchclass):
                 raise ValueError(f"{notename} cannot exist if pitch is {pitch}.")
-            return cls(pitchclass + (int(pitch)+1)*12, _name=notename, **kwargs)
+            return cls(pitchclass + (int(pitch)+1)*OCTAVE_NUMBER, _name=notename, **kwargs)
 
         else:
             raise ValueError(f"there is no notename called {name}.")
@@ -398,11 +411,11 @@ class NoteMidi(NoteOctave):
         bool
             ``True`` if the input is a valid note name, ``False`` otherwise.
         """
-        if super().is_notename(name):
-            match     = re.match(notename_ptn, name)
-            notename  = name[:match.end()]
-            pitch     = name[match.end():]
+        match     = re.match(notename_ptn, name)
+        notename  = name[:match.end()]
+        pitch     = name[match.end():]
 
+        if super().is_notename(notename):
             return pitch_pitchclass_relation(int(pitch), NOTENAME_TO_PITCH[notename])
         return False
 
@@ -421,4 +434,4 @@ class NoteMidi(NoteOctave):
         bool
             ``True`` if the input is a valid MIDI note number, ``False`` otherwise.
         """
-        return isinstance(note_number, int) and 0 <= note_number < 128
+        return isinstance(note_number, int) and 0 <= note_number < MIDI_NUMBER

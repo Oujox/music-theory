@@ -22,7 +22,11 @@ synth
     Provides an array of waveforms for changing tones
 """
 
-from .note import NoteMidi, NoteOctave
+from .note import NoteMidi
+from .note import NoteOctave
+from .note import MIDI_NUMBER
+from .note import OCTAVE_NUMBER
+
 from .key import Key
 from . import scale
 
