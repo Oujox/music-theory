@@ -1,8 +1,10 @@
 from numpy import ndarray
-from .synthesiser import SynthesiserObject
-from ..tuner import TunerHandler
 
-class SynthesiserHandler(TunerHandler):
+from .synthesiser import SynthesiserObject
+from ..note import NoteHandlerProxy
+
+
+class SynthesiserHandler(NoteHandlerProxy):
 
     def __init__(self, note_number: int, **kwargs) -> None:
         # mods

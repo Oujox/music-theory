@@ -26,8 +26,8 @@ from .note import NoteMidi
 from .note import NoteOctave
 from .note import MIDI_NUMBER
 from .note import OCTAVE_NUMBER
+from .handler import NoteHandlerProxy
 
 from .key import Key
 from . import scale
-
-from .handler import NoteHandlerProxy
+from . import tuner
