@@ -1,9 +1,9 @@
-from ..note.scale import Scale
+from ..note.scale import ScaleBase
 from .abc import TunerObject
 
 class JustIntonation(TunerObject):
 
-    def hz(self, note_number: int, scale: Scale) -> float:
+    def hz(self, note_number: int, scale: ScaleBase) -> float:
         return 
 
 class EqualTemperament(TunerObject):

@@ -1,6 +1,6 @@
-from .abc import Scale
+from .abc import ScaleBase
 from .key import Key
-from .note import NoteBase
+from .note import NoteOctave
 
 
 def count_flat_sharp(key: Key) -> int:
@@ -21,14 +21,18 @@ def generate_mask_by_key(fs_count: int) -> list[int]:
     return mask
 
 
-class CurchMode(Scale):
+class CurchMode(ScaleBase):
 
     degree: tuple[int]
     s_mask: tuple[int]
 
+    def __init__(self, key: str|Key):
+        self.key = key if isinstance(key, Key) else Key(key)
+
+
     @property
-    def diatonic(self) -> list[NoteBase]:
-        diatonic_ = [ NoteBase.from_notename(self.key.name) ]
+    def diatonic(self) -> list[NoteOctave]:
+        diatonic_ = [ NoteOctave.from_notename(self.key.name) ]
 
         fs_count = count_flat_sharp(self.key)
         k_mask = generate_mask_by_key(fs_count)
@@ -36,7 +40,7 @@ class CurchMode(Scale):
         for n in range(6):
             note = diatonic_[n] + self.degree[n]
             notename = note.names_sequence[self.s_mask[n+1] + k_mask[n+1] + 2]
-            diatonic_.append(NoteBase.from_notename(notename))
+            diatonic_.append(NoteOctave.from_notename(notename))
 
         return diatonic_
 

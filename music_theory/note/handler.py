@@ -1,9 +1,9 @@
 import typing as t
-from .note import Note
+from .note import NoteMidi
 
 from ..mst_object import MstModObject
 
-class NoteHandlerProxy(Note):
+class NoteHandlerProxy(NoteMidi):
     """
     """
 

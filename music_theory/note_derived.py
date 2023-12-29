@@ -1,7 +1,7 @@
 from .synthesiser import SynthesiserHandler
 
 
-class Note_(SynthesiserHandler):
+class NoteDerived(SynthesiserHandler):
     """
     Data to provide many ways of expressing things about note
 

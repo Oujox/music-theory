@@ -4,7 +4,7 @@ import re
 import typing as t
 
 from .quality import Quality
-from ..note import NoteBase
+from ..note import NoteOctave
 from ..mst_object import MstObject
 
 
@@ -58,5 +58,5 @@ class Chord(MstObject):
     
     @classmethod
     def is_rootname(cls, name: str) -> t.TypeGuard[str]:
-        return NoteBase.is_notename(re.match(notename_ptn, name).group())
+        return NoteOctave.is_notename(re.match(notename_ptn, name).group())
         

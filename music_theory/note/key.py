@@ -1,8 +1,9 @@
 import typing as t
+from .abc import NoteBase
 from ._statics import NOTENAME_TO_PITCH, PITCH_TO_NOTENAME, ALL_KEYNAME, FIFTH_SEQUENCE
 
 
-class Key:
+class Key(NoteBase):
 
     def __init__(self, name: str) -> None:
 

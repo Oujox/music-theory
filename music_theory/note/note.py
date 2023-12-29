@@ -1,12 +1,11 @@
-"""Note and NoteBase"""
+"""NoteMidi and NoteOctave"""
 from __future__ import annotations
 
 import re
 import typing as t
 
-from .abc import Scale
+from .abc import ScaleBase, NoteBase
 from ._statics import NOTENAME_TO_PITCH, PITCH_TO_NOTENAME, ALL_NOTENAME
-from ..mst_object import MstObject
 
 notename_ptn = re.compile(r"[A-G][b#]{0,2}")
 
@@ -31,18 +30,54 @@ def pitch_pitchclass_relation(pitch: int, pitchclass: int) -> bool:
     return -1 <= pitch < 9
 
 
-class NoteBase(MstObject):
+class NoteOctave(NoteBase):
+    """
+    Data that provides a basic representation of note on the octave
 
-    def __init__(self, pitchclass: int, **kwargs) -> None:
+    Parameters
+    ----------
+    picthclass : int
+        sequential number with C as 0 ( 0 ~ 7 )
+    scale : Scale
+        select a ``scale.Scale`` containing note
+
+    See Also
+    --------
+    NoteOctave.from_notename : Constructor from notename.
+
+    Examples
+    --------
+    Constructing NoteOctave from a pitchclass.
+
+      >>> n_num = 0  # pitchclass number
+      >>> c = NoteOctave(pitchclass=n_num)
+      >>> c
+      ['Dbb', 'C', 'B#']
+
+    Constructing NoteOctave from a notename.
+
+      >>> note_name = "C"
+      >>> c = NoteOctave.from_notename(name=note_name)
+      >>> c
+      'C4'
+
+    """
+    def __init__(
+            self,
+            pitchclass: int,
+            *,
+            scale: ScaleBase|None = None,
+            **kwargs
+            ) -> None:
 
         if not self.is_pitchclass(pitchclass):
-            raise ValueError(f"pitchclass において {pitchclass} は範囲外です.")
+            raise ValueError("")
 
         self._pitchclass: int = pitchclass
+        self._scale: ScaleBase|None = scale
         self._name : str|None = kwargs.pop("_name", None)
-        self._scale: Scale|None = kwargs.pop("scale", None)
 
-        if isinstance(self._scale, Scale):
+        if isinstance(self._scale, ScaleBase):
             self.__update_notename_by_scale(self._scale)
 
     @property
@@ -73,7 +108,7 @@ class NoteBase(MstObject):
         return self._pitchclass
 
     @property
-    def names_sequence(self) -> tuple[str | None]:
+    def names_sequence(self) -> tuple[str|None]:
         """Returns the sequence of note names for the pitch class of the note.
 
         Returns:
@@ -82,11 +117,7 @@ class NoteBase(MstObject):
         return PITCH_TO_NOTENAME[self._pitchclass]
 
     @property
-    def scale(self) -> Scale | None:
-        return self._scale
-
-    @scale.setter
-    def scale(self, scale: Scale) -> None:
+    def scale(self) -> ScaleBase|None:
         """Set the scale of the note.
 
         Args:
@@ -95,51 +126,55 @@ class NoteBase(MstObject):
         Raises:
             ValueError: If the scale is not an instance of Scale.
         """
+        return self._scale
+
+    @scale.setter
+    def scale(self, scale: ScaleBase) -> None:
         self._scale = scale
         self.__update_notename_by_scale(scale)
 
-    def __eq__(self, other: int | NoteBase) -> bool:
+    def __eq__(self, other: int|NoteOctave) -> bool:
         return self._pitchclass == int(other)
 
-    def __ne__(self, other: int | NoteBase) -> bool:
+    def __ne__(self, other: int|NoteOctave) -> bool:
         return self._pitchclass != int(other)
 
-    def __add__(self, other: int) -> t.Self:
-        return self.__class__((self._pitchclass + other)%12)
+    def __add__(self, other: int) -> NoteOctave:
+        return NoteOctave((self._pitchclass + other)%12, scale=self._scale)
 
-    def __sub__(self, other: int) -> t.Self:
-        return self.__class__((self._pitchclass - other)%12)
+    def __sub__(self, other: int) -> NoteOctave:
+        return NoteOctave((self._pitchclass - other)%12, scale=self._scale)
 
     def __int__(self) -> int:
         return self._pitchclass
 
     def __str__(self) -> str:
-        return str(self._name)
+        return self.name if self.name is not None else str(self.names)
 
     def __repr__(self) -> str:
-        return str(self._name)
+        return self.name if self.name is not None else str(self.names)
 
-    def __update_notename_by_scale(self, scale: Scale) -> None:
-        names = frozenset([ n for n in self.names_sequence if n is not None])
+    def __update_notename_by_scale(self, scale: ScaleBase) -> None:
+        names    = frozenset([ n for n in self.names_sequence if n is not None])
         diatonic = frozenset([ k.name for k in scale.diatonic ])
         self._name = name[0] if len((name := list(names & diatonic))) == 1 else None
 
     @classmethod
-    def from_notename(cls, name: str, **kwargs) -> NoteBase:
+    def from_notename(cls, name: str, **kwargs) -> NoteOctave:
         """
-        Create a NoteBase object from a note name.
+        Create a NoteOctave object from a note name.
 
         Parameters
         ----------
         name : str
             The note name, e.g. 'C', 'Db', 'F#', etc.
         kwargs
-            Additional keyword arguments to pass to the NoteBase constructor.
+            Additional keyword arguments to pass to the NoteOctave constructor.
 
         Returns
         -------
-        NoteBase
-            The NoteBase object.
+        NoteOctave
+            The NoteOctave object.
 
         Raises
         ------
@@ -185,50 +220,57 @@ class NoteBase(MstObject):
         return isinstance(pitchclass, int) and 0 <= pitchclass < 12
 
 
-class Note(NoteBase):
-
+class NoteMidi(NoteOctave):
     """
-    Data to provide many ways of expressing things about note
+    Data that provides a basic representation of note on the Midi standard
 
     Parameters
     ----------
     note_number : int
-        note_number in midi standard
-    tuner : TunerObject
-        Tuner object provided by ``note.tuner``
-    synthe : SynthesiserObject
-        Synthesiser object provided by ``note.synthe``
+        note_number in midi standard ( 0 ~ 127 )
+    scale : Scale
+        select a ``scale.Scale`` containing note
 
     See Also
     --------
-    Note.from_notename : Constructor from notename and pitch.
+    NoteMidi.from_notename : Constructor from notename and pitch.
 
     Examples
     --------
-    Constructing Note from a note_number.
+    Constructing NoteMidi from a note_number.
 
-      >>> n_num = 60  # is Dbb4, C4 or B#4
-      >>> c4 = Note(note_number=n_num)
+      >>> n_num = 60  # midi number
+      >>> c4 = NoteMidi(note_number=n_num)
       >>> c4
-      <Note: ['Dbb4', 'C4', 'B#4']; number: 60>
 
-    Constructing Note from a notename.
+      >>> <Note: ['Dbb4', 'C4', 'B#3']; number: 60>
 
-      >>> n_name, n_pitch = "C", 4
-      >>> c4 = Note.from_notename(name=n_name, picth=n_pitch)
+    Constructing NoteMidi from a notename.
+
+      >>> note_name = "C4"
+      >>> c4 = NoteMidi.from_notename(name=note_name)
       >>> c4
 
       >>> <Note: C4; number: 60>
 
     """
-
-    def __init__(self, note_number: int, **kwargs) -> None:
+    def __init__(
+            self,
+            note_number: int,
+            *,
+            scale: ScaleBase = None,
+            **kwargs
+            ) -> None:
 
         if not self.is_notenumber(note_number):
             raise ValueError("")
         self._number: int = note_number
 
-        super().__init__( note_number%12, **kwargs )
+        super().__init__(
+            note_number%12,
+            scale=scale,
+            **kwargs
+            )
 
     @property
     def number(self) -> int:
@@ -256,9 +298,9 @@ class Note(NoteBase):
             list[str]: The note names.
         """
         if self.pitchclass == 0:
-            return [ n + str(self.pitch - int(i == 0)) for i, n in enumerate(super().names) ]
+            return [ n + str(self.pitch - int(i == 2)) for i, n in enumerate(super().names) ]
         if self.pitchclass == 11:
-            return [ n + str(self.pitch + int(i == 2)) for i, n in enumerate(super().names) ]
+            return [ n + str(self.pitch + int(i == 0)) for i, n in enumerate(super().names) ]
         return [ n + str(self.pitch) for n in super().names ]
 
     @property
@@ -270,52 +312,58 @@ class Note(NoteBase):
         """
         return self._number//12 - 1
 
-    def __eq__(self, other: int | Note) -> bool:
+    def __eq__(self, other: int | NoteMidi) -> bool:
         return self._number == int(other)
 
-    def __ne__(self, other: int | Note) -> bool:
+    def __ne__(self, other: int | NoteMidi) -> bool:
         return self._number != int(other)
 
-    def __lt__(self, other: int | Note) -> bool:
+    def __lt__(self, other: int | NoteMidi) -> bool:
         return self._number < int(other)
 
-    def __gt__(self, other: int | Note) -> bool:
+    def __gt__(self, other: int | NoteMidi) -> bool:
         return self._number > int(other)
 
-    def __add__(self, other: int) -> Note:
-        return Note(self._number + other)
+    def __add__(self, other: int) -> NoteMidi:
+        return NoteMidi(self._number + other)
 
-    def __sub__(self, other: int) -> Note:
-        return Note(self._number - other)
+    def __sub__(self, other: int) -> NoteMidi:
+        return NoteMidi(self._number - other)
 
-    def __matmul__(self, other: int) -> Note:
-        return Note(self._number + other*12)
+    def __matmul__(self, other: int) -> NoteMidi:
+        return NoteMidi(self._number + other*12)
 
     def __int__(self) -> int:
         return self._number
 
     def __str__(self) -> str:
-        return "<Note: {}; number: {}>".format(
-            self.name if self._name is not None else str(self.names),
+        return "<NoteMidi: {}; number: {}>".format(
+            self.name if self.name is not None else str(self.names),
+            self._number
+        )
+
+    def __repr__(self) -> str:
+        return "<NoteMidi: {}; number: {}>".format(
+            self.name if self.name is not None else str(self.names),
             self._number
         )
 
     @classmethod
     def from_notename(cls, name: str, **kwargs) -> t.Self:
         """
-        Create a Note object from a note name.
+        Create a NoteMidi object from a note name.
 
         Parameters
         ----------
         name : str
             The note name, e.g. 'C4', 'Db4', 'F#5', etc.
         kwargs
-            Additional keyword arguments to pass to the Note constructor.
+            Additional keyword arguments to pass to the NoteMidi constructor.
 
         Returns
         -------
-        Note
-            The Note object.
+        NoteMidi
+            The NoteMidi object.
 
         Raises
         ------

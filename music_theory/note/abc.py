@@ -1,15 +1,32 @@
-from abc import ABCMeta, abstractproperty
-
-from .key import Key
+"""Base classes"""
+from abc import abstractproperty
 from ..mst_object import MstObject
 
 
-class Scale(MstObject, metaclass=ABCMeta):
-
-    def __init__(self, key: str|Key):
-        self.key = key if isinstance(key, Key) else Key(key)
-
+class NoteBase(MstObject):
+    """Abstract base class for notes."""
     @property
     @abstractproperty
-    def diatonic(self) -> list:
-        pass
+    def pitchclass(self) -> int:
+        """
+        The pitch class of the note.
+
+        Returns
+        -------
+        int
+            The pitch class of the note.
+        """
+
+class ScaleBase(MstObject):
+    """Abstract base class for scales."""
+    @property
+    @abstractproperty
+    def diatonic(self) -> list[NoteBase]:
+        """
+        The diatonic notes of the scale.
+
+        Returns
+        -------
+        list
+            The diatonic notes of the scale.
+        """
