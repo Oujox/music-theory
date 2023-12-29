@@ -2,7 +2,7 @@ from abc import ABCMeta, abstractmethod
 import os, datetime, wave, pyaudio
 import numpy as np
 
-from ..mst_object import MstModObject
+from ..mst_object import MstSubObject
 
 
 class Oscillator(metaclass=ABCMeta):
@@ -27,7 +27,7 @@ class Modulator(metaclass=ABCMeta):
     pass
 
 
-class SynthesiserObject(MstModObject, metaclass=ABCMeta):
+class SynthesiserObject(MstSubObject, metaclass=ABCMeta):
 
     amp = pyaudio.PyAudio()
     osi: Oscillator

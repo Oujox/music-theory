@@ -1,23 +1,16 @@
 import typing as t
 from .note import NoteMidi
 
-from ..mst_object import MstModObject
 
 class NoteHandlerProxy(NoteMidi):
     """
     """
 
-    @property
-    def mods(self) -> dict[str, MstModObject]:
-        return dict(
-            [ [k, v] for k, v in self.__dict__.items() if isinstance(v, MstModObject)]
-        )
-
     def __add__(self, other: int) -> t.Self:
-        return self.__class__(self._number + other, **self.mods)
+        return self.__class__(self._number + other, **self.mst_subs)
 
     def __sub__(self, other: int) -> t.Self:
-        return self.__class__(self._number - other, **self.mods)
+        return self.__class__(self._number - other, **self.mst_subs)
 
     def __matmul__(self, other: int) -> t.Self:
-        return self.__class__(self._number + other*12, **self.mods)
+        return self.__class__(self._number + other*12, **self.mst_subs)

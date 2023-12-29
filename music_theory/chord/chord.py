@@ -5,7 +5,7 @@ import typing as t
 
 from .quality import Quality
 from ..note import NoteOctave
-from ..mst_object import MstObject
+from ..mst_object import MstMainObject
 
 
 notename_ptn = re.compile(r"[A-Z][#b]?")
@@ -14,7 +14,7 @@ tension_ptn = re.compile(r"([-+b#]?9|[+#]?11|[-b]?13)+")
 onchord_ptn = re.compile(r"\/[A-Z][#b]?")
 
 
-class Chord(MstObject):
+class Chord(MstMainObject):
 
     def __init__(self, name: str):
         self._name = name

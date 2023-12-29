@@ -3,8 +3,10 @@ from __future__ import annotations
 
 import re
 import typing as t
+from typing import Any
 
-from .abc import ScaleBase, NoteBase
+from .abc import NoteBase, ScaleBase, TunerBase
+from .tuner import EqualTemperament
 from ._statics import NOTENAME_TO_PITCH, PITCH_TO_NOTENAME, ALL_NOTENAME
 
 OCTAVE_NUMBER = 12
@@ -77,11 +79,19 @@ class NoteOctave(NoteBase):
             raise ValueError("")
 
         self._pitchclass: int = pitchclass
-        self._scale: ScaleBase|None = scale
-        self._name : str|None = kwargs.pop("_name", None)
+        self._name      : str|None = kwargs.pop("_name", None)
 
-        if isinstance(self._scale, ScaleBase):
-            self.__update_notename_by_scale(self._scale)
+        # mstsubobject
+        self.scale      : ScaleBase|None = scale
+
+    @property
+    def pitchclass(self) -> int:
+        """Returns the pitch class of the note.
+
+        Returns:
+            int: The pitch class of the note.
+        """
+        return self._pitchclass
 
     @property
     def name(self) -> str|None:
@@ -102,15 +112,6 @@ class NoteOctave(NoteBase):
         return [ n for n in PITCH_TO_NOTENAME[self.pitchclass] if n is not None]
 
     @property
-    def pitchclass(self) -> int:
-        """Returns the pitch class of the note.
-
-        Returns:
-            int: The pitch class of the note.
-        """
-        return self._pitchclass
-
-    @property
     def names_sequence(self) -> tuple[str|None]:
         """Returns the sequence of note names for the pitch class of the note.
 
@@ -119,22 +120,10 @@ class NoteOctave(NoteBase):
         """
         return PITCH_TO_NOTENAME[self._pitchclass]
 
-    @property
-    def scale(self) -> ScaleBase|None:
-        """Set the scale of the note.
-
-        Args:
-            scale (Scale): The scale to set.
-
-        Raises:
-            ValueError: If the scale is not an instance of Scale.
-        """
-        return self._scale
-
-    @scale.setter
-    def scale(self, scale: ScaleBase) -> None:
-        self._scale = scale
-        self.__update_notename_by_scale(scale)
+    def __setattr__(self, __name: str, __value: t.Any) -> None:
+        if __name == "scale" and isinstance(__value, ScaleBase):
+            self.__update_notename_by_scale(__value)
+        return super().__setattr__(__name, __value)
 
     def __eq__(self, other: int|NoteOctave) -> bool:
         return self._pitchclass == int(other)
@@ -143,10 +132,10 @@ class NoteOctave(NoteBase):
         return self._pitchclass != int(other)
 
     def __add__(self, other: int) -> NoteOctave:
-        return NoteOctave((self._pitchclass + other)%OCTAVE_NUMBER, scale=self._scale)
+        return NoteOctave((self._pitchclass + other)%OCTAVE_NUMBER, scale=self.scale)
 
     def __sub__(self, other: int) -> NoteOctave:
-        return NoteOctave((self._pitchclass - other)%OCTAVE_NUMBER, scale=self._scale)
+        return NoteOctave((self._pitchclass - other)%OCTAVE_NUMBER, scale=self.scale)
 
     def __int__(self) -> int:
         return self._pitchclass
@@ -163,7 +152,7 @@ class NoteOctave(NoteBase):
         self._name = name[0] if len((name := list(names & diatonic))) == 1 else None
 
     @classmethod
-    def from_notename(cls, name: str, **kwargs) -> NoteOctave:
+    def from_notename(cls, name: str, **kwargs) -> t.Self:
         """
         Create a NoteOctave object from a note name.
 
@@ -232,7 +221,9 @@ class NoteMidi(NoteOctave):
     note_number : int
         note_number in midi standard ( 0 ~ 127 )
     scale : Scale
-        select a ``scale.Scale`` containing note
+        select a subclass of ``scale.ScaleBase`` containing note
+    tuner : TunerBase
+        select a subclass of ``tuner.TunerBase``
 
     See Also
     --------
@@ -261,13 +252,18 @@ class NoteMidi(NoteOctave):
             self,
             note_number: int,
             *,
-            scale: ScaleBase = None,
+            scale: ScaleBase|None = None,
+            tuner: TunerBase = EqualTemperament(440),
             **kwargs
             ) -> None:
 
         if not self.is_notenumber(note_number):
             raise ValueError("")
+
         self._number: int = note_number
+
+        # mstsubobject
+        self.tuner  : TunerBase = tuner
 
         super().__init__(
             note_number%OCTAVE_NUMBER,
@@ -285,7 +281,7 @@ class NoteMidi(NoteOctave):
         return self._number
 
     @property
-    def name(self) -> str | None:
+    def name(self) -> str|None:
         """Get the note name.
 
         Returns:
@@ -319,6 +315,10 @@ class NoteMidi(NoteOctave):
         """
         return self._number//OCTAVE_NUMBER - 1
 
+    @property
+    def hz(self) -> float:
+        return self.tuner.hz(self._number)
+
     def __eq__(self, other: int | NoteMidi) -> bool:
         return self._number == int(other)
 
@@ -338,13 +338,25 @@ class NoteMidi(NoteOctave):
         return self._number >= int(other)
 
     def __add__(self, other: int) -> NoteMidi:
-        return NoteMidi(self._number + other)
+        return NoteMidi(
+            self._number + other,
+            scale=self.scale,
+            tuner=self.tuner
+            )
 
     def __sub__(self, other: int) -> NoteMidi:
-        return NoteMidi(self._number - other)
+        return NoteMidi(
+            self._number - other,
+            scale=self.scale,
+            tuner=self.tuner
+            )
 
     def __matmul__(self, other: int) -> NoteMidi:
-        return NoteMidi(self._number + other*OCTAVE_NUMBER)
+        return NoteMidi(
+            self._number + other*OCTAVE_NUMBER,
+            scale=self.scale,
+            tuner=self.tuner
+            )
 
     def __int__(self) -> int:
         return self._number
