@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import re
 import typing as t
-from typing import Any
 
 from .abc import NoteBase, ScaleBase, TunerBase
 from .tuner import EqualTemperament
@@ -317,6 +316,11 @@ class NoteMidi(NoteOctave):
 
     @property
     def hz(self) -> float:
+        """Get the frequency of the note in Hertz.
+
+        Returns:
+            float: The frequency of the note in Hertz
+        """
         return self.tuner.hz(self._number)
 
     def __eq__(self, other: int | NoteMidi) -> bool:

@@ -8,7 +8,7 @@ class JustIntonation(TunerBase):
         self.scale = scale
 
     def hz(self, note_number: int) -> float:
-        return
+        return 0.
 
 class EqualTemperament(TunerBase):
 

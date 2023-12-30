@@ -1,5 +1,5 @@
 import pytest
-from music_theory import NoteMidi, NoteOctave, MIDI_NUMBER, OCTAVE_NUMBER
+from music_theory.note import NoteMidi, NoteOctave, MIDI_NUMBER, OCTAVE_NUMBER
 
 
 @pytest.fixture

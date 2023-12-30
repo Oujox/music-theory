@@ -18,8 +18,6 @@ Available subpackages
 tuner
     Provide frequencies that vary with the
     method of sound tuning
-synth
-    Provides an array of waveforms for changing tones
 """
 
 from .note import NoteMidi
@@ -31,3 +29,11 @@ from .handler import NoteHandlerProxy
 from .key import Key
 from . import scale
 from . import tuner
+
+__all__ = [
+    "NoteMidi",
+    "NoteOctave",
+    "Key",
+    "scale",
+    "tuner"
+]

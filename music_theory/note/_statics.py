@@ -1,4 +1,4 @@
-PITCH_TO_NOTENAME: dict[int, tuple[str|None]] = {
+PITCH_TO_NOTENAME: dict[int, tuple[str|None, ...]] = {
     9 : ( "Bbb" , None , "A"  , None , "G##" ),
     10: ( "Cbb" , "Bb" , None , "A#" , None  ),
     11: ( None  , "Cb" , "B"  , None , "A##" ),

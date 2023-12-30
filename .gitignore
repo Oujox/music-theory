@@ -4,8 +4,5 @@
 # ignore version control files by pyenv in all dir
 .python-version
 
-# ignore .vscode
-.vscode
-
 # ignore sandbox.py
 sandbox.py

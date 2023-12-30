@@ -1,1 +1,6 @@
-from .chord import Chord, Quality
+from .chord import Chord
+from .chord import Quality
+
+__all__ = [
+    "Chord",
+]
