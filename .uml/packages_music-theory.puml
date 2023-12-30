@@ -1,0 +1,90 @@
+@startuml packages_music-theory
+set namespaceSeparator none
+package "music_theory" as music_theory {
+}
+package "music_theory.blend" as music_theory.blend {
+}
+package "music_theory.blend.abc" as music_theory.blend.abc {
+}
+package "music_theory.blend.blend" as music_theory.blend.blend {
+}
+package "music_theory.chord" as music_theory.chord {
+}
+package "music_theory.chord._statics" as music_theory.chord._statics {
+}
+package "music_theory.chord.chord" as music_theory.chord.chord {
+}
+package "music_theory.chord.quality" as music_theory.chord.quality {
+}
+package "music_theory.mstobject" as music_theory.mstobject {
+}
+package "music_theory.note" as music_theory.note {
+}
+package "music_theory.note._statics" as music_theory.note._statics {
+}
+package "music_theory.note.abc" as music_theory.note.abc {
+}
+package "music_theory.note.handler" as music_theory.note.handler {
+}
+package "music_theory.note.key" as music_theory.note.key {
+}
+package "music_theory.note.note" as music_theory.note.note {
+}
+package "music_theory.note.scale" as music_theory.note.scale {
+}
+package "music_theory.note.tuner" as music_theory.note.tuner {
+}
+package "music_theory.note_derived" as music_theory.note_derived {
+}
+package "music_theory.oscilloscope" as music_theory.oscilloscope {
+}
+package "music_theory.oscilloscope.abc" as music_theory.oscilloscope.abc {
+}
+package "music_theory.oscilloscope.handler" as music_theory.oscilloscope.handler {
+}
+package "music_theory.tone" as music_theory.tone {
+}
+package "music_theory.tone.abc" as music_theory.tone.abc {
+}
+package "music_theory.tone.handler" as music_theory.tone.handler {
+}
+package "music_theory.tone.oscillator" as music_theory.tone.oscillator {
+}
+package "music_theory.tone.synthesiser" as music_theory.tone.synthesiser {
+}
+package "music_theory.utils" as music_theory.utils {
+}
+music_theory --> music_theory.chord
+music_theory --> music_theory.note
+music_theory --> music_theory.note_derived
+music_theory.blend.abc --> music_theory.blend.abc
+music_theory.blend.blend --> music_theory.blend.abc
+music_theory.chord --> music_theory.chord.chord
+music_theory.chord.chord --> music_theory.chord.quality
+music_theory.chord.quality --> music_theory.chord._statics
+music_theory.note --> music_theory.note.handler
+music_theory.note --> music_theory.note.key
+music_theory.note --> music_theory.note.note
+music_theory.note.abc --> music_theory.note.abc
+music_theory.note.handler --> music_theory.note.note
+music_theory.note.key --> music_theory.note._statics
+music_theory.note.key --> music_theory.note.abc
+music_theory.note.note --> music_theory.note._statics
+music_theory.note.note --> music_theory.note.abc
+music_theory.note.note --> music_theory.note.tuner
+music_theory.note.scale --> music_theory.note.abc
+music_theory.note.scale --> music_theory.note.key
+music_theory.note.scale --> music_theory.note.note
+music_theory.note.tuner --> music_theory.note.abc
+music_theory.note_derived --> music_theory.tone
+music_theory.oscilloscope --> music_theory.oscilloscope.handler
+music_theory.oscilloscope.abc --> music_theory.oscilloscope.abc
+music_theory.oscilloscope.handler --> music_theory.oscilloscope.abc
+music_theory.tone --> music_theory.tone.abc
+music_theory.tone --> music_theory.tone.handler
+music_theory.tone --> music_theory.tone.synthesiser
+music_theory.tone.abc --> music_theory.tone.abc
+music_theory.tone.handler --> music_theory.tone.synthesiser
+music_theory.tone.oscillator --> music_theory.tone.abc
+music_theory.tone.synthesiser --> music_theory.tone.abc
+@enduml

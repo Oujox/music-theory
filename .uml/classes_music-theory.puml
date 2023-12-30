@@ -1,0 +1,202 @@
+@startuml classes_music-theory
+set namespaceSeparator none
+class "Aeorian" as music_theory.note.scale.Aeorian {
+  degree : tuple
+  s_mask : tuple
+}
+class "Blend" as music_theory.blend.blend.Blend {
+}
+class "BlendBase" as music_theory.blend.abc.BlendBase {
+}
+class "Chord" as music_theory.chord.chord.Chord {
+  is_rootname(name: str) -> t.TypeGuard[str]
+  parse(name: str) -> tuple[str, str, str, str]
+}
+class "CurchMode" as music_theory.note.scale.CurchMode {
+  degree : tuple[int]
+  diatonic
+  key
+  s_mask : tuple[int]
+}
+class "Dorian" as music_theory.note.scale.Dorian {
+  degree : tuple
+  s_mask : tuple
+}
+class "EnvelopeBase" as music_theory.tone.abc.EnvelopeBase {
+}
+class "EqualTemperament" as music_theory.note.tuner.EqualTemperament {
+  root : float
+  hz(note_number: int) -> float
+}
+class "FilterBase" as music_theory.tone.abc.FilterBase {
+}
+class "Ionian" as music_theory.note.scale.Ionian {
+  degree : tuple
+  s_mask : tuple
+}
+class "JustIntonation" as music_theory.note.tuner.JustIntonation {
+  root : float
+  scale
+  hz(note_number: int) -> float
+}
+class "Key" as music_theory.note.key.Key {
+  accsidental
+  fifth
+  name
+  pitchclass
+  is_keyname(name: str) -> t.TypeGuard[str]
+}
+class "Locrian" as music_theory.note.scale.Locrian {
+  degree : tuple
+  s_mask : tuple
+}
+class "Lydian" as music_theory.note.scale.Lydian {
+  degree : tuple
+  s_mask : tuple
+}
+class "Major" as music_theory.note.scale.Major {
+}
+class "Minor" as music_theory.note.scale.Minor {
+}
+class "Mixolydian" as music_theory.note.scale.Mixolydian {
+  degree : tuple
+  s_mask : tuple
+}
+class "ModulatorBase" as music_theory.tone.abc.ModulatorBase {
+}
+class "MstMainObject" as music_theory.mstobject.MstMainObject {
+  mst_subs
+}
+class "MstObject" as music_theory.mstobject.MstObject {
+}
+class "MstSubObject" as music_theory.mstobject.MstSubObject {
+}
+class "Noisewave" as music_theory.tone.oscillator.Noisewave {
+  wave(hz: float, sec: float) -> _np.ndarray
+}
+class "Note" as music_theory.note_derived.Note {
+}
+class "NoteBase" as music_theory.note.abc.NoteBase {
+  pitchclass
+}
+class "NoteHandlerProxy" as music_theory.note.handler.NoteHandlerProxy {
+}
+class "NoteMidi" as music_theory.note.note.NoteMidi {
+  hz
+  name
+  names
+  number
+  pitch
+  tuner
+  as_octave() -> NoteOctave
+  from_notename(name: str) -> t.Self
+  is_notename(name: str) -> t.TypeGuard[str]
+  is_notenumber(note_number: int) -> t.TypeGuard[int]
+}
+class "NoteOctave" as music_theory.note.note.NoteOctave {
+  name
+  names
+  names_sequence
+  pitchclass
+  scale : ScaleBase | None
+  from_notename(name: str) -> t.Self
+  is_notename(name: str) -> t.TypeGuard[str]
+  is_pitchclass(pitchclass: int) -> t.TypeGuard[int]
+}
+class "OscillatorBase" as music_theory.tone.abc.OscillatorBase {
+  sampling_hz : int
+  {abstract}wave(hz: float, sec: float) -> ndarray
+}
+class "OscilloscopeBase" as music_theory.oscilloscope.abc.OscilloscopeBase {
+  {abstract}display() -> None
+}
+class "OscilloscopeHandler" as music_theory.oscilloscope.handler.OscilloscopeHandler {
+  scope
+}
+class "Phrygian" as music_theory.note.scale.Phrygian {
+  degree : tuple
+  s_mask : tuple
+}
+class "Quality" as music_theory.chord.quality.Quality {
+  parse(quality: str, append: str) -> list[int] | None
+}
+class "Sawtoothwave" as music_theory.tone.oscillator.Sawtoothwave {
+  wave(hz: float, sec: float) -> _np.ndarray
+}
+class "ScaleBase" as music_theory.note.abc.ScaleBase {
+  diatonic
+}
+class "Sinewave" as music_theory.tone.oscillator.Sinewave {
+  wave(hz: float, sec: float) -> _np.ndarray
+}
+class "Suqarewave" as music_theory.tone.oscillator.Suqarewave {
+  wave(hz: float, sec: float) -> _np.ndarray
+}
+class "Synthesiser" as music_theory.tone.synthesiser.Synthesiser {
+  env : Optional[EnvelopeBase]
+  fil : Optional[FilterBase]
+  mod : Optional[ModulatorBase]
+  osi
+  play(wave_: np.ndarray) -> None
+  save(path: str, wave_: np.ndarray, hz: float) -> str
+  wave(hz: float, sec: float)
+}
+class "ToneBase" as music_theory.tone.abc.ToneBase {
+  {abstract}play(wave_: ndarray) -> None
+  {abstract}save(path: str, wave_: ndarray, hz: float) -> str
+  {abstract}wave(hz: float, sec: float) -> ndarray
+}
+class "ToneHandler" as music_theory.tone.handler.ToneHandler {
+  synthe
+  wave(sec: float) -> ndarray
+  wave_forsound() -> ndarray
+}
+class "Trianglewave" as music_theory.tone.oscillator.Trianglewave {
+  wave(hz: float, sec: float) -> _np.ndarray
+}
+class "TunerBase" as music_theory.note.abc.TunerBase {
+  {abstract}hz(note_number: int) -> float
+}
+music_theory.blend.abc.BlendBase --|> music_theory.tone.abc.ToneBase
+music_theory.blend.blend.Blend --|> music_theory.blend.abc.BlendBase
+music_theory.chord.chord.Chord --|> music_theory.mstobject.MstMainObject
+music_theory.mstobject.MstMainObject --|> music_theory.mstobject.MstObject
+music_theory.mstobject.MstSubObject --|> music_theory.mstobject.MstObject
+music_theory.note.abc.NoteBase --|> music_theory.mstobject.MstMainObject
+music_theory.note.abc.ScaleBase --|> music_theory.mstobject.MstSubObject
+music_theory.note.abc.TunerBase --|> music_theory.mstobject.MstSubObject
+music_theory.note.handler.NoteHandlerProxy --|> music_theory.note.note.NoteMidi
+music_theory.note.key.Key --|> music_theory.note.abc.NoteBase
+music_theory.note.note.NoteMidi --|> music_theory.note.note.NoteOctave
+music_theory.note.note.NoteOctave --|> music_theory.note.abc.NoteBase
+music_theory.note.scale.Aeorian --|> music_theory.note.scale.CurchMode
+music_theory.note.scale.CurchMode --|> music_theory.note.abc.ScaleBase
+music_theory.note.scale.Dorian --|> music_theory.note.scale.CurchMode
+music_theory.note.scale.Ionian --|> music_theory.note.scale.CurchMode
+music_theory.note.scale.Locrian --|> music_theory.note.scale.CurchMode
+music_theory.note.scale.Lydian --|> music_theory.note.scale.CurchMode
+music_theory.note.scale.Major --|> music_theory.note.scale.Ionian
+music_theory.note.scale.Minor --|> music_theory.note.scale.Aeorian
+music_theory.note.scale.Mixolydian --|> music_theory.note.scale.CurchMode
+music_theory.note.scale.Phrygian --|> music_theory.note.scale.CurchMode
+music_theory.note.tuner.EqualTemperament --|> music_theory.note.abc.TunerBase
+music_theory.note.tuner.JustIntonation --|> music_theory.note.abc.TunerBase
+music_theory.note_derived.Note --|> music_theory.tone.handler.ToneHandler
+music_theory.oscilloscope.abc.OscilloscopeBase --|> music_theory.mstobject.MstSubObject
+music_theory.oscilloscope.handler.OscilloscopeHandler --|> music_theory.tone.handler.ToneHandler
+music_theory.tone.abc.ToneBase --|> music_theory.mstobject.MstSubObject
+music_theory.tone.handler.ToneHandler --|> music_theory.note.handler.NoteHandlerProxy
+music_theory.tone.oscillator.Noisewave --|> music_theory.tone.abc.OscillatorBase
+music_theory.tone.oscillator.Sawtoothwave --|> music_theory.tone.abc.OscillatorBase
+music_theory.tone.oscillator.Sinewave --|> music_theory.tone.abc.OscillatorBase
+music_theory.tone.oscillator.Suqarewave --|> music_theory.tone.abc.OscillatorBase
+music_theory.tone.oscillator.Trianglewave --|> music_theory.tone.abc.OscillatorBase
+music_theory.tone.synthesiser.Synthesiser --|> music_theory.tone.abc.ToneBase
+music_theory.chord.quality.Quality --* music_theory.chord.chord.Chord : _quality
+music_theory.note.key.Key --* music_theory.note.scale.CurchMode : key
+music_theory.oscilloscope.abc.OscilloscopeBase --* music_theory.oscilloscope.handler.OscilloscopeHandler : scope
+music_theory.tone.abc.ToneBase --* music_theory.tone.handler.ToneHandler : synthe
+music_theory.note.abc.ScaleBase --o music_theory.note.tuner.JustIntonation : scale
+music_theory.note.abc.TunerBase --o music_theory.note.note.NoteMidi : tuner
+music_theory.tone.abc.OscillatorBase --o music_theory.tone.synthesiser.Synthesiser : osi
+@enduml
