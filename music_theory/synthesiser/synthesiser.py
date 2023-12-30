@@ -1,4 +1,4 @@
-from .abc import SynthesiserBase, Oscillator, Filter, Envelope, Modulator
+from .abc import SynthesiserBase, OscillatorBase, FilterBase, EnvelopeBase, ModulatorBase
 import os, datetime, wave, pyaudio, atexit
 import numpy as np
 
@@ -10,10 +10,10 @@ class Synthesiser(SynthesiserBase):
 
     def __init__(
             self,
-            oscillator: Oscillator,
-            filter: Filter = None,
-            envelope: Envelope = None,
-            modulator: Modulator = None,
+            oscillator: OscillatorBase,
+            filter: FilterBase = None,
+            envelope: EnvelopeBase = None,
+            modulator: ModulatorBase = None,
             ):
 
         self.osi = oscillator

@@ -1,7 +1,7 @@
 from .synthesiser import SynthesiserHandler
 
 
-class NoteDerived(SynthesiserHandler):
+class Note(SynthesiserHandler):
     """
     Data to provide many ways of expressing things about note
 
@@ -36,5 +36,3 @@ class NoteDerived(SynthesiserHandler):
       >>> <Note: C4; number: 60>
 
     """
-    def __init__(self, note_number: int, **kwargs) -> None:
-        super().__init__(note_number, **kwargs)

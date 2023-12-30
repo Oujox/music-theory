@@ -5,7 +5,7 @@ from numpy import ndarray
 from ..mst_object import MstSubObject
 
 
-class Oscillator(metaclass=ABCMeta):
+class OscillatorBase(metaclass=ABCMeta):
 
     def __init__(self, sampling_hz: int = 44100) -> None:
         self.sampling_hz = sampling_hz
@@ -15,15 +15,15 @@ class Oscillator(metaclass=ABCMeta):
         pass
 
 
-class Filter(metaclass=ABCMeta):
+class FilterBase(metaclass=ABCMeta):
     pass
 
 
-class Envelope(metaclass=ABCMeta):
+class EnvelopeBase(metaclass=ABCMeta):
     pass
 
 
-class Modulator(metaclass=ABCMeta):
+class ModulatorBase(metaclass=ABCMeta):
     pass
 
 

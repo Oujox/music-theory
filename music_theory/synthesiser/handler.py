@@ -7,7 +7,7 @@ from ..note import NoteHandlerProxy
 class SynthesiserHandler(NoteHandlerProxy):
 
     def __init__(self, note_number: int, **kwargs) -> None:
-        # mods
+        # mstsubobj
         self.synthe: SynthesiserBase = kwargs.pop("synthe", None)
 
         super().__init__(note_number, **kwargs)
