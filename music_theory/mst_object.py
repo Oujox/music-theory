@@ -27,5 +27,5 @@ class MstMainObject(MstObject):
     @property
     def mst_subs(self) -> dict[str, MstSubObject]:
         return dict(
-            *[ [k, v] for k, v in self.__dict__.items() if isinstance(v, MstSubObject)]
+            [ [k, v] for k, v in self.__dict__.items() if isinstance(v, MstSubObject)]
         )

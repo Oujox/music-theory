@@ -1,6 +1,6 @@
 from numpy import ndarray
 
-from .synthesiser import SynthesiserObject
+from .synthesiser import SynthesiserBase
 from ..note import NoteHandlerProxy
 
 
@@ -8,14 +8,14 @@ class SynthesiserHandler(NoteHandlerProxy):
 
     def __init__(self, note_number: int, **kwargs) -> None:
         # mods
-        self.synthe: SynthesiserObject = kwargs.pop("synthe", None)
+        self.synthe: SynthesiserBase = kwargs.pop("synthe", None)
 
         super().__init__(note_number, **kwargs)
 
     def wave(self, sec: float = 1, **kwargs) -> ndarray:
         wave = self.synthe.wave(self.hz, sec)
         if kwargs.pop("sound", False):
-            self.synthe.sound(wave, **kwargs)
+            self.synthe.play(wave, **kwargs)
         if (save := kwargs.pop("save", None)) is not None:
             self.synthe.save(save, wave, self.hz, **kwargs)
         return wave
@@ -23,7 +23,7 @@ class SynthesiserHandler(NoteHandlerProxy):
     def wave_forsound(self, **kwargs) -> ndarray:
         wave = self.synthe.wave(self.hz, 1/self.hz)
         if kwargs.pop("sound", False):
-            self.synthe.sound(wave, **kwargs)
+            self.synthe.play(wave, **kwargs)
         if (path := kwargs.pop("path", None)) is not None:
             self.synthe.save(path, wave, self.hz, **kwargs)
         return wave

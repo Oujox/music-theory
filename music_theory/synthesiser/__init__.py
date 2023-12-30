@@ -1,4 +1,4 @@
-from .abc import SynthesiserObject
+from .abc import SynthesiserBase
 
 from .synthesiser import Synthesiser
 from .handler import SynthesiserHandler
