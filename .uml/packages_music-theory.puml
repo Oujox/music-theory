@@ -54,9 +54,11 @@ package "music_theory.tone.synthesiser" as music_theory.tone.synthesiser {
 }
 package "music_theory.utils" as music_theory.utils {
 }
+music_theory --> music_theory.blend
 music_theory --> music_theory.chord
 music_theory --> music_theory.note
 music_theory --> music_theory.note_derived
+music_theory.blend --> music_theory.blend.blend
 music_theory.blend.abc --> music_theory.blend.abc
 music_theory.blend.blend --> music_theory.blend.abc
 music_theory.chord --> music_theory.chord.chord

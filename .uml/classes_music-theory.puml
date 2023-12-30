@@ -5,8 +5,13 @@ class "Aeorian" as music_theory.note.scale.Aeorian {
   s_mask : tuple
 }
 class "Blend" as music_theory.blend.blend.Blend {
+  sampling_hz : int
+  play(sec: float) -> None
+  save(path: str) -> str
+  wave(sec: float) -> np.ndarray
 }
 class "BlendBase" as music_theory.blend.abc.BlendBase {
+  {abstract}wave(sec: float) -> ndarray
 }
 class "Chord" as music_theory.chord.chord.Chord {
   is_rootname(name: str) -> t.TypeGuard[str]
@@ -142,12 +147,13 @@ class "Synthesiser" as music_theory.tone.synthesiser.Synthesiser {
   wave(hz: float, sec: float)
 }
 class "ToneBase" as music_theory.tone.abc.ToneBase {
+  osi
   {abstract}play(wave_: ndarray) -> None
   {abstract}save(path: str, wave_: ndarray, hz: float) -> str
   {abstract}wave(hz: float, sec: float) -> ndarray
 }
 class "ToneHandler" as music_theory.tone.handler.ToneHandler {
-  synthe
+  tone
   wave(sec: float) -> ndarray
   wave_forsound() -> ndarray
 }
@@ -195,7 +201,8 @@ music_theory.tone.synthesiser.Synthesiser --|> music_theory.tone.abc.ToneBase
 music_theory.chord.quality.Quality --* music_theory.chord.chord.Chord : _quality
 music_theory.note.key.Key --* music_theory.note.scale.CurchMode : key
 music_theory.oscilloscope.abc.OscilloscopeBase --* music_theory.oscilloscope.handler.OscilloscopeHandler : scope
-music_theory.tone.abc.ToneBase --* music_theory.tone.handler.ToneHandler : synthe
+music_theory.tone.abc.OscillatorBase --* music_theory.tone.abc.ToneBase : osi
+music_theory.tone.abc.ToneBase --* music_theory.tone.handler.ToneHandler : tone
 music_theory.note.abc.ScaleBase --o music_theory.note.tuner.JustIntonation : scale
 music_theory.note.abc.TunerBase --o music_theory.note.note.NoteMidi : tuner
 music_theory.tone.abc.OscillatorBase --o music_theory.tone.synthesiser.Synthesiser : osi

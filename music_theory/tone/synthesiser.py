@@ -10,10 +10,10 @@ class Synthesiser(ToneBase):
 
     def __init__(
             self,
-            oscillator: OscillatorBase,
-            filter: FilterBase = None,
-            envelope: EnvelopeBase = None,
-            modulator: ModulatorBase = None,
+            oscillator : OscillatorBase,
+            filter     : FilterBase = None,
+            envelope   : EnvelopeBase = None,
+            modulator  : ModulatorBase = None,
             ):
 
         self.osi = oscillator

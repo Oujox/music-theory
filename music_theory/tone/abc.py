@@ -29,6 +29,8 @@ class ModulatorBase(metaclass=ABCMeta):
 
 class ToneBase(MstSubObject, metaclass=ABCMeta):
 
+    osi: OscillatorBase
+
     @abstractmethod
     def wave(self, hz: float, sec: float, **kwargs: t.Any) -> ndarray:
         pass
