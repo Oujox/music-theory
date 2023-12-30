@@ -377,6 +377,14 @@ class NoteMidi(NoteOctave):
             self._number
         )
 
+    def as_octave(self) -> NoteOctave:
+        """Returns the equivalent NoteOctave for the NoteMidi object.
+
+        Returns:
+            NoteOctave: The equivalent NoteOctave for the NoteMidi object.
+        """
+        return NoteOctave(self.pitchclass, scale=self.scale)
+
     @classmethod
     def from_notename(cls, name: str, **kwargs) -> t.Self:
         """

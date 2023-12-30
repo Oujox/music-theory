@@ -1,4 +1,5 @@
 import pytest
+from music_theory import scale
 from music_theory.note import NoteMidi, NoteOctave, MIDI_NUMBER, OCTAVE_NUMBER
 
 
@@ -65,6 +66,14 @@ def data_midinotenames_sequence():
             data.append(PITCH_TO_NOTENAME[pitchclass])
     return data
 
+@pytest.fixture
+def data_scales():
+    from music_theory.note._statics import ALL_KEYNAME
+    scales = []
+    for scale_t in scale.CURCH_MODES:
+        for key in ALL_KEYNAME:
+            scales.append(scale_t(key))
+    return scales
 
 class TestNoteOctave:
 
@@ -280,6 +289,65 @@ class TestNoteMidi:
         for names in data_midinotenames:
             for name in names:
                 assert NoteMidi.is_notename(name)
+
+    def test_notemidi_init_by_scale(self, data_midinumbers, data_scales):
+        for scale in data_scales:
+            for i in data_midinumbers:
+                n = NoteMidi(i, scale=scale)
+                assert isinstance(n, NoteMidi)
+
+    def test_notemidi_prop_name_by_scale(self, data_midinumbers, data_scales):
+        for scale in data_scales:
+            scale = [ n.name for n in scale.diatonic ]
+            for i in data_midinumbers:
+                n = NoteMidi(i, scale=scale)
+                if n.name is None:
+                    assert not n.name in scale
+                else:
+                    assert n.as_octave().name in scale
+
+    def test_notemidi_add_by_scale(self, data_midinumbers, data_scales):
+        for scale in data_scales:
+            scale = [ n.name for n in scale.diatonic ]
+            for i in data_midinumbers:
+                for j in data_midinumbers[:-i]:
+                    n = NoteMidi(i, scale=scale)
+                    if n.name is None:
+                        assert not (n + j).name in scale
+                    else:
+                        assert (n + j).as_octave().name in scale
+
+    def test_notemidi_sub_by_scale(self, data_midinumbers, data_scales):
+        for scale in data_scales:
+            scale = [ n.name for n in scale.diatonic ]
+            for i in data_midinumbers:
+                for j in data_midinumbers[:i]:
+                    n = NoteMidi(i, scale=scale)
+                    if n.name is None:
+                        assert not (n - j).name in scale
+                    else:
+                        assert (n - j).as_octave().name in scale
+
+    def test_notemidi_str_by_scale(self, data_midinumbers, data_scales):
+        for scale in data_scales:
+            scale = set([ n.name for n in scale.diatonic ])
+            for i in data_midinumbers:
+                n = NoteMidi(i, scale=scale)
+                if n.name is None:
+                    assert str(n) == f"<NoteMidi: {n.names}; number: {i}>"
+                else:
+                    assert str(n) == f"<NoteMidi: {(set(n.names) & scale)[0]}; number: {i}>"
+
+    def test_notemidi_repr_by_scale(self, data_midinumbers, data_scales):
+        for scale in data_scales:
+            scale = set([ n.name for n in scale.diatonic ])
+            for i in data_midinumbers:
+                n = NoteMidi(i, scale=scale)
+                if n.name is None:
+                    assert repr(n) == f"<NoteMidi: {n.names}; number: {i}>"
+                else:
+                    assert repr(n) == f"<NoteMidi: {(set(n.names) & scale)[0]}; number: {i}>"
+
 
 
 class TestNoteMidi_from_notename:

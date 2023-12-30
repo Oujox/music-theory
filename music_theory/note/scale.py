@@ -5,10 +5,9 @@ from .note import NoteOctave
 
 def count_flat_sharp(key: Key) -> int:
     if key.fifth == 6:
-        fs_count = fs_count - 12 if key.fifth > int(key.accsidental == 1) + 5 else key.fifth
+        return key.fifth - 12 if key.fifth > int(key.accsidental == 1) + 5 else key.fifth
     else:
-        fs_count = fs_count - 12 if key.fifth > 5 else key.fifth
-    return fs_count
+        return key.fifth - 12 if key.fifth > 5 else key.fifth
 
 def generate_mask_by_key(fs_count: int) -> list[int]:
     mask = [0]*7
@@ -71,3 +70,14 @@ class Locrian(CurchMode):
 class Major(Ionian): pass
 
 class Minor(Aeorian): pass
+
+
+CURCH_MODES = (
+    Lydian,
+    Ionian,
+    Mixolydian,
+    Dorian,
+    Aeorian,
+    Phrygian,
+    Locrian
+)
