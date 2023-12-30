@@ -5,7 +5,7 @@ import typing as t
 
 from .quality import Quality
 from ..note import NoteOctave
-from ..mst_object import MstMainObject
+from ..mstobject import MstMainObject
 
 
 notename_ptn = re.compile(r"[A-Z][#b]?")

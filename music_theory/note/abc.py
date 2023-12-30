@@ -1,6 +1,6 @@
 """Base classes"""
 from abc import abstractmethod, abstractproperty
-from ..mst_object import MstMainObject, MstSubObject
+from ..mstobject import MstMainObject, MstSubObject
 
 
 class NoteBase(MstMainObject):

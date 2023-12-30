@@ -1,4 +1,4 @@
-from .abc import SynthesiserBase, OscillatorBase, FilterBase, EnvelopeBase, ModulatorBase
+from .abc import ToneBase, OscillatorBase, FilterBase, EnvelopeBase, ModulatorBase
 import os, datetime, wave, pyaudio, atexit
 import numpy as np
 
@@ -6,7 +6,7 @@ AudioPort = pyaudio.PyAudio()
 atexit.register(lambda : AudioPort.terminate())
 
 
-class Synthesiser(SynthesiserBase):
+class Synthesiser(ToneBase):
 
     def __init__(
             self,

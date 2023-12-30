@@ -2,7 +2,7 @@ import typing as t
 from abc import ABCMeta, abstractmethod
 from numpy import ndarray
 
-from ..mst_object import MstSubObject
+from ..mstobject import MstSubObject
 
 
 class OscillatorBase(metaclass=ABCMeta):
@@ -27,7 +27,7 @@ class ModulatorBase(metaclass=ABCMeta):
     pass
 
 
-class SynthesiserBase(MstSubObject, metaclass=ABCMeta):
+class ToneBase(MstSubObject, metaclass=ABCMeta):
 
     @abstractmethod
     def wave(self, hz: float, sec: float, **kwargs: t.Any) -> ndarray:

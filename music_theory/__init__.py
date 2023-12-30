@@ -1,6 +1,6 @@
 from .note import *
 from .chord import *
-from . import synthesiser as synthe
+from . import tone
 from . import oscilloscope as scope
 
 from .note_derived import Note

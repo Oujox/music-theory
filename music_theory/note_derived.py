@@ -1,7 +1,7 @@
-from .synthesiser import SynthesiserHandler
+from .tone import ToneHandler
 
 
-class Note(SynthesiserHandler):
+class Note(ToneHandler):
     """
     Data to provide many ways of expressing things about note
 

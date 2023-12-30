@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from ..mst_object import MstSubObject
+from ..mstobject import MstSubObject
 
 class OscilloscopeBase(MstSubObject):
 

@@ -1,8 +1,8 @@
 from .abc import OscilloscopeBase
-from ..synthesiser import SynthesiserHandler
+from ..tone import ToneHandler
 
 
-class OscilloscopeHandler(SynthesiserHandler):
+class OscilloscopeHandler(ToneHandler):
 
     def __init__(self, note_number: int, **kwargs) -> None:
         # mstsubobj
