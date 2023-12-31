@@ -5,7 +5,7 @@ from numpy import ndarray
 from ..mstobject import MstMainObject
 
 
-class BlendBase(MstMainObject):
+class MixerBase(MstMainObject):
     """
     """
 
