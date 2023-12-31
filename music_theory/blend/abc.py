@@ -2,13 +2,21 @@ import typing as t
 from abc import abstractmethod
 from numpy import ndarray
 
-from ..tone.abc import ToneBase
+from ..mstobject import MstMainObject
 
 
-class BlendBase(ToneBase):
+class BlendBase(MstMainObject):
     """
     """
 
     @abstractmethod
-    def wave(self, sec: float, **kwargs: t.Any) -> ndarray:
+    def wave(self, sec: float) -> ndarray:
+        pass
+
+    @abstractmethod
+    def play(self, sec: float) -> ndarray:
+        pass
+
+    @abstractmethod
+    def save(self, path: str) -> str:
         pass

@@ -25,6 +25,13 @@ class Synthesiser(ToneBase):
         return self.osi.wave(hz, sec)
 
     def play(self, wave_: np.ndarray) -> None:
+
+        def min_max(x, axis=None):
+            min = x.min(axis=axis, keepdims=True)
+            max = x.max(axis=axis, keepdims=True)
+            result = 2*(x-min)/(max-min) - 1
+            return result
+
         wave_ = wave_ * ((2**15)-1 / np.max(wave_))
         bin_wave = wave_.astype(np.int16).tobytes()
 

@@ -6,11 +6,13 @@ class "Aeorian" as music_theory.note.scale.Aeorian {
 }
 class "Blend" as music_theory.blend.blend.Blend {
   sampling_hz : int
-  play(sec: float) -> None
+  play(sec: float) -> np.ndarray
   save(path: str) -> str
   wave(sec: float) -> np.ndarray
 }
 class "BlendBase" as music_theory.blend.abc.BlendBase {
+  {abstract}play(sec: float) -> ndarray
+  {abstract}save(path: str) -> str
   {abstract}wave(sec: float) -> ndarray
 }
 class "Chord" as music_theory.chord.chord.Chord {
@@ -163,7 +165,7 @@ class "Trianglewave" as music_theory.tone.oscillator.Trianglewave {
 class "TunerBase" as music_theory.note.abc.TunerBase {
   {abstract}hz(note_number: int) -> float
 }
-music_theory.blend.abc.BlendBase --|> music_theory.tone.abc.ToneBase
+music_theory.blend.abc.BlendBase --|> music_theory.mstobject.MstMainObject
 music_theory.blend.blend.Blend --|> music_theory.blend.abc.BlendBase
 music_theory.chord.chord.Chord --|> music_theory.mstobject.MstMainObject
 music_theory.mstobject.MstMainObject --|> music_theory.mstobject.MstObject
