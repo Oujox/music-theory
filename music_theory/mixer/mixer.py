@@ -1,12 +1,15 @@
 import pyaudio
 import numpy as np
 
-from .abc import BlendBase
+from .abc import MixerBase
 from ..note.abc import TunerBase
-from ..note_derived import Note
+
+from ..derived import Note
+from ..audio import AudioPort
+from ..utils import min_max
 
 
-class Blend(BlendBase):
+class Mixer(MixerBase):
 
     def __init__(
             self,
@@ -21,25 +24,23 @@ class Blend(BlendBase):
         self.sampling_hz = sampling_hz
 
         for _note in self._notes:
+            if tuner is not None:
+                _note.tuner = tuner
             _note.tone.osi.sampling_hz = sampling_hz
 
     def wave(self, sec: float) -> np.ndarray:
-        wave = np.zeros(int(self.sampling_hz*sec))
+        wave_ = np.zeros(int(self.sampling_hz*sec))
         for note in self._notes:
-            w = note.wave_forsound()
-            wave += np.append(
-                np.tile(w, wave.shape[0]//w.shape[0]),
-                w[:wave.shape[0]%w.shape[0]]
-            )
-        return wave
+            wave_ += note.wave(sec)
+        return wave_
 
-    def play(self, sec: float) -> None:
-        wave = self.wave(sec)
-        wave = wave * ((2**15)-1 / np.max(wave))
-        bin_wave = wave.astype(np.int16).tobytes()
+    def play(self, sec: float) -> np.ndarray:
 
-        p = pyaudio.PyAudio()
-        stream_out = p.open(
+        wave_ = min_max(self.wave(sec))
+        wave_ = wave_ * ((2**15)-1 / np.max(wave_))
+        bin_wave = wave_.astype(np.int16).tobytes()
+
+        stream_out = AudioPort.open(
             format=pyaudio.paInt16,
             channels=1,
             rate=self.sampling_hz,
@@ -52,6 +53,8 @@ class Blend(BlendBase):
             stream_out.write(bin_wave)
         stream_out.stop_stream()
         stream_out.close()
+
+        return wave_
 
     def save(self, path: str) -> str:
         return

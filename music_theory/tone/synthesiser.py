@@ -1,9 +1,10 @@
-from .abc import ToneBase, OscillatorBase, FilterBase, EnvelopeBase, ModulatorBase
-import os, datetime, wave, pyaudio, atexit
+import os, datetime, wave, pyaudio
 import numpy as np
 
-AudioPort = pyaudio.PyAudio()
-atexit.register(lambda : AudioPort.terminate())
+from .abc import ToneBase, OscillatorBase, FilterBase, EnvelopeBase, ModulatorBase
+
+from ..audio import AudioPort
+from ..utils import min_max
 
 
 class Synthesiser(ToneBase):
@@ -25,6 +26,8 @@ class Synthesiser(ToneBase):
         return self.osi.wave(hz, sec)
 
     def play(self, wave_: np.ndarray) -> None:
+
+        wave_ = min_max(wave_)
         wave_ = wave_ * ((2**15)-1 / np.max(wave_))
         bin_wave = wave_.astype(np.int16).tobytes()
 
