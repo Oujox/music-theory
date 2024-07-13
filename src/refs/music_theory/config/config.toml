@@ -1,0 +1,11 @@
+
+[Presentation]
+method = "midi"
+
+[Tuning]
+method = "equal12"
+root = 440 # A0
+
+[AudibleRange]
+max = 44100
+min = 20
