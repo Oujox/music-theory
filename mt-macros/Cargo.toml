@@ -1,0 +1,14 @@
+[package]
+name = "mt-macros"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[lib]
+proc-macro = true
+
+[dependencies]
+mt-macros-internals = { path = "../mt-macros-internals" }
+proc-macro2 = { workspace = true, features = ["proc-macro"] }
+quote = { workspace = true, features = ["proc-macro"] }
+syn = { workspace = true, features = ["full"] }
