@@ -1,0 +1,13 @@
+.gridster-contents {
+  background-color: #0bd;
+  /* height: 100vh; */
+  width: 100%;
+  height: calc(100vh - 200px);
+}
+.draggable-handler {
+  border: 4px dashed gray;
+  text-align: center;
+}
+.delete-button {
+  text-align: center;
+}

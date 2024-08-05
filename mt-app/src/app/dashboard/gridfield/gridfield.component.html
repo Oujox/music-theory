@@ -1,0 +1,26 @@
+<button
+  mat-raised-button
+  color="primary"
+  (click)="addItem()"
+  aria-label="icon button with a add icon"
+>
+  <mat-icon>add</mat-icon>
+</button>
+<div>現在のinnerWidth: {{ innerWidth }}</div>
+
+<gridster [options]="options" class="gridster-contents">
+  <gridster-item [item]="item" *ngFor="let item of dashboard; index as i">
+    <div class="draggable-handler">(ドラッグ可能域)</div>
+    <div>ドラッグとリサイズが可能です</div>
+    <div class="delete-button">
+      <button
+        mat-fab
+        color="warn"
+        (click)="removeItem(i)"
+        aria-label="icon button with a delete icon"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </gridster-item>
+</gridster>

@@ -1,0 +1,11 @@
+[package]
+name = "mt"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+serde = { workspace = true, features = ["serde_derive"]}
+toml = { workspace = true }
+cpal = { workspace = true }
+mt-macros = { path = "../mt-macros" }
